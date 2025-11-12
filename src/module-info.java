@@ -1,4 +1,4 @@
-module VisitorLab {
+module atu.software {
 	requires java.desktop;
 
 	requires javafx.base;

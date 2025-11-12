@@ -1,6 +1,7 @@
 package ie.atu.sw;
 
 import java.io.File;
+import java.util.Collection;
 import java.util.Random;
 
 import javafx.application.Application;
@@ -77,6 +78,11 @@ public class AppWindow extends Application {
 		// Display the window
 		stage.show();
 		stage.centerOnScreen();
+
+		// Call from init()
+		Collection<Number> col = viewer.getModel();
+		covariant(col);
+		contravariant(col);
 	}
 
 	private NodeView getNodeViewer() throws Exception {
@@ -96,6 +102,12 @@ public class AppWindow extends Application {
 		 * The following workaround can also be applied but will generate a warning from
 		 * the compiler.
 		 */
+
+		/*
+		 * <> Cannot be used because Java doesn't allow generic array creating with
+		 * concrete type parameters. Consequences: Loss of type safety Cannot add typed
+		 * elements Read only effectively More casts needed
+		 */
 		@SuppressWarnings("unchecked")
 		Node<Integer>[][] model = new Node[height][width];
 
@@ -106,6 +118,36 @@ public class AppWindow extends Application {
 			}
 		}
 		return new NodeView(model, width, height);
+	}
+
+	// It works Collection<? super Number> uses a lower-bounded wildcard
+	public void contravariant(Collection<? super Number> col) {
+		// Consequences: Can add typed elements Cannot read typed elements
+
+		// for (Number n : col) {
+		// }
+
+		// Will not compile Collection<? super Number> means the collection could be
+		// Collection<Object>
+		// col.stream().filter(e -> e.intValue() > 0).forEach(System.out::println);
+
+		// This works: println accepts Object, matching the lower bound
+		col.stream().forEach(System.out::println);
+		col.add(new Double(10.00d));
+	}
+
+	public void covariant(Collection<? extends Number> col) {
+		// Cannot add: Collection<? extends Number> is read-only
+		// col.add(new Double(10.00d)); // Compilation error: cannot add to unknown
+		// subtype
+
+		// for (Number n : col) {
+		// System.out.println(n.intValue());
+		// col.add(new Double(10.00d));
+		// }
+
+		// Both operations are covariant
+		col.stream().filter(e -> e.intValue() > 0).forEach(System.out::println);
 	}
 
 	public static void main(String[] args) {

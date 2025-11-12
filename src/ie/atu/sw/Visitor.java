@@ -1,6 +1,6 @@
 package ie.atu.sw;
 
-import java.util.function.*;
+import java.util.function.Function;
 
 public class Visitor<T> {
 	private Function<T, T> command;

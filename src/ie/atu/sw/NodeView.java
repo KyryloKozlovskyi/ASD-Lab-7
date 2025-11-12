@@ -3,6 +3,7 @@ package ie.atu.sw;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.stream.Collectors;
+
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.PixelWriter;
